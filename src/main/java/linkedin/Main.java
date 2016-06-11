@@ -6,6 +6,10 @@ import org.apache.spark.sql.DataFrame;
 import org.apache.spark.sql.SQLContext;
 import org.apache.spark.sql.functions;
 
+import static org.apache.spark.sql.functions.*;
+import static org.apache.spark.sql.functions.count;
+import static org.apache.spark.sql.functions.explode;
+
 /**
  * Created by Evegeny on 11/06/2016.
  */
@@ -18,22 +22,25 @@ public class Main {
         DataFrame linkedIn = sqlContext.read().json("data/linkedin/*.json");
         linkedIn.show();
 
-        DataFrame withSalary = linkedIn.withColumn("salary", functions.size(functions.column("keywords")).multiply(functions.column("age")).multiply(10)).drop("age");
+        DataFrame withSalary = linkedIn.
+                withColumn("salary", size(column("keywords"))
+                        .multiply(column("age")).multiply(10)).drop("age");
         withSalary.show();
 
-        DataFrame keywords = linkedIn.select(functions.explode(functions.column("keywords")).as("keyword"));
+        DataFrame keywords = linkedIn.
+                select(explode(column("keywords")).as("keyword"));
         keywords.show();
 
         DataFrame orderedBy = keywords.groupBy("keyword")
-                .agg(functions.count("keyword").as("amount"))
-                .orderBy(functions.column("amount").desc());
+                .agg(count("keyword").as("amount"))
+                .orderBy(column("amount").desc());
         orderedBy.show();
 
         String mostPopularWord = orderedBy.first().getString(orderedBy.schema().fieldIndex("keyword"));
         System.out.println("mostPopularWord = " + mostPopularWord);
 
         withSalary.where(
-                functions.column("salary").leq(1200).and(functions.array_contains(functions.column("keywords"),mostPopularWord)))
+                column("salary").leq(1200).and(array_contains(column("keywords"),mostPopularWord)))
                 .select("name","salary").show();
 
     }
