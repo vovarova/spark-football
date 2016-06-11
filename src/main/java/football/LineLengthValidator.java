@@ -18,7 +18,7 @@ public class LineLengthValidator implements LineValidator {
 
     @Override
     public DataFrame validate(DataFrame dataFrame) {
-        return dataFrame.withColumn("errorInLength", callUDF(getClass().getSimpleName()));
+        return dataFrame.withColumn("errorInLength", callUDF(getClass().getSimpleName(),column(DataFrameCreator.LINE)));
     }
 
     @Override
