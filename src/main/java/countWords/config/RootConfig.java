@@ -1,7 +1,9 @@
 package countWords.config;
 
+import countWords.UserConfig;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.broadcast.Broadcast;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -23,5 +25,6 @@ public class RootConfig {
     public JavaSparkContext sc() {
         return new JavaSparkContext(sparkConf);
     }
+
 
 }
