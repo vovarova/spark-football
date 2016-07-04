@@ -1,5 +1,8 @@
-package football;
+package football.generator;
 
+import football.CodesMapper;
+import football.RulesMapper;
+import football.TeamsMapper;
 import org.fluttercode.datafactory.impl.DataFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
